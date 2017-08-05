@@ -9,16 +9,12 @@
     <scut.carson_ho.diy_view.SuperEditText
         android:layout_width="200dp"
         android:layout_height="wrap_content"
+        android:background="@null"
         android:textSize="10sp"
         android:theme="@style/SuperEditText"
 
          />
 
-    <scut.carson_ho.diy_view.SuperEditText
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:theme="@style/SuperEditText"
-        android:textSize="10sp"
-         />
+    
 
 </LinearLayout>

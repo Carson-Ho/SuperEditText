@@ -11,6 +11,11 @@
         <attr name="Colorclick" format="color"  />
         <attr name="Colorunclick" format="color"  />
 
+        <attr name="accountClick" format="reference" />
+        <attr name="accountUnClick" format="reference" />
+        <attr name="delete" format="reference" />
+        <attr name="delete2" format="reference" />
+
         <attr name="moveBlock_Angle" format="float"  />
         <attr name="fixBlock_Angle" format="float"  />
         <attr name="move_Interpolator" format="reference"  />
