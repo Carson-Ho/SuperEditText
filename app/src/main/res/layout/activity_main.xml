@@ -1,20 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center">
 
 
     <scut.carson_ho.diy_view.SuperEditText
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:background="@null"
-        android:textSize="10sp"
-        android:theme="@style/SuperEditText"
+        app:cursor="@drawable/cursortest"
+
+        app:Colorclick="@color/colorAccent"
+
+        android:textSize="20sp"
+        android:textColor="@color/colorfocus"
+
+
+
+
 
          />
 
-    
+    <scut.carson_ho.diy_view.SuperEditText
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+
+        android:textSize="20sp"
+
+        />
+
 
 </LinearLayout>

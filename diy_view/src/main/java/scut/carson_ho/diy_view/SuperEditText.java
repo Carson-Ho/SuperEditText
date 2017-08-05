@@ -9,6 +9,9 @@ import android.graphics.drawable.Drawable;
 import android.support.v7.widget.AppCompatEditText;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.widget.EditText;
+
+import java.lang.reflect.Field;
 
 /**
  * Created by Carson_Ho on 17/8/4.
@@ -27,6 +30,7 @@ public class SuperEditText extends AppCompatEditText {
     private Drawable mClearDrawable_click;
     private Drawable logo_click;
     private Drawable logo_unclick;
+    private int cursor;
 
     private Drawable mClearDrawable_unclick;
 
@@ -56,8 +60,11 @@ public class SuperEditText extends AppCompatEditText {
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SuperEditText);
 
         mClearDrawable_unclick = getResources().getDrawable(R.drawable.delete);
+
+//        logo_click = typedArray.getResources(R.styleable.SuperEditText_accountClick);
         logo_click = getResources().getDrawable(R.drawable.account);
         logo_unclick = getResources().getDrawable(R.drawable.account_unclick);
+
 
         // 方块颜色（使用十六进制代码，如#333、#8e8e8e）
         int defaultColor1 = context.getResources().getColor(R.color.colorClick); // 默认颜色
@@ -66,20 +73,25 @@ public class SuperEditText extends AppCompatEditText {
         colorUnClick = typedArray.getColor(R.styleable.SuperEditText_Colorunclick, defaultColor2);
         color = colorUnClick;
 
-//      mClearDrawable_unclick.setBounds(0, 0, mClearDrawable_unclick.getIntrinsicWidth()-50, mClearDrawable_unclick.getIntrinsicHeight()-50);
-        mClearDrawable_unclick.setBounds(0, 0, 80, 80);
+        cursor = typedArray.getResourceId(R.styleable.SuperEditText_accountClick, R.drawable.cursor);
 
-        // 从右侧开始算起，后两个参数 = 宽高
-        logo_click.setBounds(0, 0, 80, 80);
-        logo_unclick.setBounds(0, 0, 80, 80);
+//      mClearDrawable_unclick.setBounds(0, 0, mClearDrawable_unclick.getIntrinsicWidth()-50, mClearDrawable_unclick.getIntrinsicHeight()-50);
+        mClearDrawable_unclick.setBounds(0, 0, 50, 50);
+
+        // 从右侧开始算起，后两个参数 = 宽高(px)
+        logo_click.setBounds(0, 0, 50, 50);
+        logo_unclick.setBounds(0, 0, 50, 50);
 
         mPaint = new Paint();
         // mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setStrokeWidth(1.0f);
+        mPaint.setStrokeWidth(1.5f);
         mPaint.setColor(colorUnClick);
+        setTextColor(color);
 
         setCompoundDrawables(logo_unclick, null,
                null, null);
+
+        setBackground(null);
 
 
 
@@ -118,6 +130,18 @@ public class SuperEditText extends AppCompatEditText {
         setCompoundDrawables(qian ? logo_click : logo_unclick, null,
                 visible ? mClearDrawable_unclick : null, null);
         color = qian ? colorClick : colorUnClick;
+        setTextColor(color);
+
+        try {
+            Field f = EditText.class.getDeclaredField("mCursorDrawableRes");
+            f.setAccessible(true);
+            f.set(this, getResources().getDrawable(cursor));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
         invalidate();
     }
 
@@ -125,11 +149,12 @@ public class SuperEditText extends AppCompatEditText {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         mPaint.setColor(color);
+        setTextColor(color);
 
         int x=this.getScrollX();
         int w=this.getMeasuredWidth();
-        canvas.drawLine(0, this.getHeight() - 1, w+x,
-                this.getHeight() - 1, mPaint);
+        canvas.drawLine(0, this.getHeight()-1, w+x,
+                this.getHeight() -1, mPaint);
 
     }
 }

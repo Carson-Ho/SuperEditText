@@ -13,6 +13,8 @@
 
         <attr name="accountClick" format="reference" />
         <attr name="accountUnClick" format="reference" />
+        <attr name="cursor" format="reference" />
+
         <attr name="delete" format="reference" />
         <attr name="delete2" format="reference" />
 
