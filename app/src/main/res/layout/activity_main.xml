@@ -12,16 +12,10 @@
     <scut.carson_ho.diy_view.SuperEditText
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        app:cursor="@drawable/cursortest"
-
-        app:Colorclick="@color/colorAccent"
-
+        app:accountClick="@drawable/delete"
         android:textSize="20sp"
         android:textColor="@color/colorfocus"
-
-
-
-
+        app:cursor="@drawable/cursortest"
 
          />
 
