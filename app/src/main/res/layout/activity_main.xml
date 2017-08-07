@@ -11,7 +11,7 @@
 
     <scut.carson_ho.diy_view.SuperEditText
         android:layout_width="200dp"
-        android:layout_height="wrap_content"
+        android:layout_height="300dp"
         app:ic_delete="@drawable/ic_left_click"
         app:ic_left_click="@drawable/delete"
         app:ic_left_unclick="@drawable/ic_left_click"
@@ -19,7 +19,7 @@
         app:left_height="60"
         app:delete_width="80"
         app:delete_height="80"
-        app:lineColor_click="@color/colorAccent1"
+        app:lineColor_click="@color/colorfocus"
 
         android:textSize="20sp"
         android:textColor="@color/colorfocus"

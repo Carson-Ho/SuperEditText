@@ -27,28 +27,18 @@ public class SuperEditText extends AppCompatEditText {
 
     private int  ic_deleteResID; // 删除图标 资源ID
     private Drawable  ic_delete; // 删除图标
+    private int delete_x,delete_y,delete_width,delete_height; // 删除图标起点(x,y)、删除图标宽、高（px）
 
-    private int  ic_left_clickResID;    // 左侧图标 资源ID（点击）
-    private Drawable  ic_left_click; // 左侧图标（点击）
-
-    private int  ic_left_unclickResID;    // 左侧图标 资源ID（未点击）
-    private Drawable  ic_left_unclick; // 左侧图标（未点击）
-
-    private  int left_x,left_y; // 左侧图标起点
-    private int left_width; // 左侧图标宽（px）
-    private int left_height; // 左侧图标高（px）
-
-    private  int delete_x,delete_y; // 左侧图标起点
-    private int delete_width; // 左侧图标宽（px）
-    private int delete_height; // 左侧图标高（px）
+    private int  ic_left_clickResID,ic_left_unclickResID;    // 左侧图标 资源ID（点击 & 无点击）
+    private Drawable  ic_left_click,ic_left_unclick; // 左侧图标（点击 & 未点击）
+    private int left_x,left_y,left_width,left_height; // 左侧图标起点（x,y）、左侧图标宽、高（px）
 
     private int cursor; // 光标
 
-    
-
-    private int lineColor_click;
-    private int lineColor_unclick;
+    // 分割线变量
+    private int lineColor_click,lineColor_unclick;// 点击时 & 未点击颜色
     private int color;
+
 
     public SuperEditText(Context context) {
         super(context);
@@ -70,50 +60,44 @@ public class SuperEditText extends AppCompatEditText {
         // 获取控件资源
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SuperEditText);
 
-
-        // 删除图标大小
-        // 起点(x，y)
-        delete_x = typedArray.getInteger(R.styleable.SuperEditText_delete_x, 0);
-        delete_y = typedArray.getInteger(R.styleable.SuperEditText_delete_y, 0);
-        delete_width = typedArray.getInteger(R.styleable.SuperEditText_delete_width, 30);
-        delete_height = typedArray.getInteger(R.styleable.SuperEditText_delete_height, 30);
-
-        // 删除图标
-        ic_deleteResID = typedArray.getResourceId(R.styleable.SuperEditText_ic_delete,R.drawable.delete);
+        /*左侧图标（点击 & 未点击）*/
+        // a. 点击状态
+        ic_left_clickResID = typedArray.getResourceId(R.styleable.SuperEditText_ic_left_click, R.drawable.ic_left_click);
         // 初始化操作
         // 1. 根据资源ID获取图标资源（转化成Drawable对象）
-        // 2. 再设置图标大小(从右侧开始算起，后两个参数 = 宽高(px))
-        ic_delete =  getResources().getDrawable(ic_deleteResID);
-        ic_delete.setBounds(delete_x, delete_y, delete_width, delete_height);
-
-        // 左侧图标大小
+        ic_left_click =  getResources().getDrawable(ic_left_clickResID);
+        // 2. 设置图标大小
         // 起点(x，y)
         left_x = typedArray.getInteger(R.styleable.SuperEditText_left_x, 0);
         left_y = typedArray.getInteger(R.styleable.SuperEditText_left_y, 0);
         left_width = typedArray.getInteger(R.styleable.SuperEditText_left_width, 30);
         left_height = typedArray.getInteger(R.styleable.SuperEditText_left_height, 30);
-        
-        ic_left_clickResID = typedArray.getResourceId(R.styleable.SuperEditText_ic_left_click, R.drawable.ic_left_click);
-        // 初始化操作
-        // 1. 根据资源ID获取图标资源（转化成Drawable对象）
-        // 2. 再设置图标大小
-        ic_left_click =  getResources().getDrawable(ic_left_clickResID);
         ic_left_click.setBounds(left_x, left_y,left_width, left_height);
 
+        // b. 未点击状态
         ic_left_unclickResID = typedArray.getResourceId(R.styleable.SuperEditText_ic_left_unclick, R.drawable.ic_left_unclick);
         // 初始化操作
         // 1. 根据资源ID获取图标资源（转化成Drawable对象）
-        // 2. 再设置图标大小
+        // 2. 设置图标大小
         ic_left_unclick =  getResources().getDrawable(ic_left_unclickResID);
         ic_left_unclick.setBounds(left_x, left_y,left_width, left_height);
 
 
+        /*光标*/
+        // 通过反射动态设置光标颜色
         cursor = typedArray.getResourceId(R.styleable.SuperEditText_cursor, R.drawable.cursor);
+        try {
+            Field f = TextView.class.getDeclaredField("mCursorDrawableRes");
+            f.setAccessible(true);
+            f.set(this, cursor); // 要传入ID
 
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        // 分割线相关
+        /*分割线*/
         mPaint = new Paint();
-        mPaint.setStrokeWidth(1.5f); // 分割线粗细
+        mPaint.setStrokeWidth(1.0f); // 分割线粗细
 
         // 分割线颜色（使用十六进制代码，如#333、#8e8e8e）
         int lineColorClick_default = context.getResources().getColor(R.color.lineColor_click); // 默认 = 蓝色#1296db
@@ -125,41 +109,61 @@ public class SuperEditText extends AppCompatEditText {
         mPaint.setColor(lineColor_unclick); // 分割线默认颜色 = 灰色
         setTextColor(color); // 字体默认颜色 = 灰色
 
-        // 设置图片（初始状态仅有左侧图片）
-        setCompoundDrawables( ic_left_unclick, null,
-               null, null);
-
         // 消除自带下划线
         setBackground(null);
 
 
+        /*删除图标*/
+        ic_deleteResID = typedArray.getResourceId(R.styleable.SuperEditText_ic_delete,R.drawable.delete);
+        // 初始化操作
+        // 1. 根据资源ID获取图标资源（转化成Drawable对象）
+        ic_delete =  getResources().getDrawable(ic_deleteResID);
 
-        try {
-            Field f = TextView.class.getDeclaredField("mCursorDrawableRes");
-            f.setAccessible(true);
-//            f.set(this, R.drawable.cursor);
-            f.set(this, cursor); // 要传入ID
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // 2. 设置图标大小(从右侧开始算起，后两个参数 = 宽高(px))
+        // 起点(x，y)
+        delete_x = typedArray.getInteger(R.styleable.SuperEditText_delete_x, 0);
+        delete_y = typedArray.getInteger(R.styleable.SuperEditText_delete_y, 0);
+        delete_width = typedArray.getInteger(R.styleable.SuperEditText_delete_width, 30);
+        delete_height = typedArray.getInteger(R.styleable.SuperEditText_delete_height, 30);
+        ic_delete.setBounds(delete_x, delete_y, delete_width, delete_height);
 
 
+        // 设置图片（初始状态仅有左侧图片）
+        setCompoundDrawables( ic_left_unclick, null,
+                null, null);
 
     }
 
-
+    /**
+     * 复写EditText本身的方法
+     * 调用时刻：当文本变化时
+     */
     @Override
     protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
         super.onTextChanged(text, start, lengthBefore, lengthAfter);
-        setClearIconVisible(hasFocus() && text.length() > 0,hasFocus());
+        setDeleteIconVisible(hasFocus() && text.length() > 0,hasFocus());
+        // hasFocus()返回是否获得EditTEXT的焦点，即是否选中
+        // setDeleteIconVisible = 根据传入的是否选中 & 是否有输入来判断是否显示删除图标
     }
 
+    /**
+     * 复写EditText本身的方法
+     * 调用时刻：当获取 & 失去焦点时
+     */
     @Override
     protected void onFocusChanged(boolean focused, int direction, Rect previouslyFocusedRect) {
         super.onFocusChanged(focused, direction, previouslyFocusedRect);
-        setClearIconVisible(focused && length() > 0,focused);
+        setDeleteIconVisible(focused && length() > 0,focused);
+        // focused = 是否获得焦点
+        // 同样根据setDeleteIconVisible判断是否要显示删除图标
     }
+
+
+    /**
+     * 写到这里
+     *
+     */
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -177,28 +181,39 @@ public class SuperEditText extends AppCompatEditText {
         return super.onTouchEvent(event);
     }
 
-    private void setClearIconVisible(boolean visible,boolean qian) {
-        setCompoundDrawables(qian ?  ic_left_click :  ic_left_unclick, null,
-                visible ?  ic_delete: null, null);
-        color = qian ? lineColor_click : lineColor_unclick;
+    /**
+     * 关注
+     * 作用：判断是否显示删除图标 & 设置分割线颜色
+     */
+    private void setDeleteIconVisible(boolean deleteVisible,boolean leftVisible) {
+        setCompoundDrawables(leftVisible ?  ic_left_click :  ic_left_unclick, null,
+                deleteVisible ?  ic_delete: null, null);
+        color = leftVisible ? lineColor_click : lineColor_unclick;
         setTextColor(color);
-
-
-
-
         invalidate();
     }
 
+    /**
+     * 关注
+     * 作用：绘制分割线
+     */
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         mPaint.setColor(color);
         setTextColor(color);
+        // 绘制分割线
+        // 需要考虑：当输入长度超过输入框时，所画的线需要跟随着延伸
+        // 解决方案：线的长度 = 控件长度 + 延伸后的长度
+        int x=this.getScrollX(); // 获取延伸后的长度
+        int w=this.getMeasuredWidth(); // 获取控件长度
 
-        int x=this.getScrollX();
-        int w=this.getMeasuredWidth();
-        canvas.drawLine(0, this.getHeight()-1, w+x,
-                this.getHeight() -1, mPaint);
+        // 传入参数时，线的长度 = 控件长度 + 延伸后的长度
+//        canvas.drawLine(0, this.getHeight()+5, w+x,
+//                this.getHeight() +5, mPaint);
+
+                canvas.drawLine(0, this.getMeasuredHeight()-200, w+x,
+                        this.getMeasuredHeight()-200, mPaint);
 
     }
 
