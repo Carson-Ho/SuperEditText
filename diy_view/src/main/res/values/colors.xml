@@ -5,6 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorAccent1">#FF4081</color>
     <color name="colorAccent2">#000000</color>
-    <color name="colorClick">#1296db</color>
-    <color name="colorUnClick">#9b9b9b</color>
+    <color name="lineColor_click">#1296db</color>
+    <color name="lineColor_unclick">#9b9b9b</color>
 </resources>

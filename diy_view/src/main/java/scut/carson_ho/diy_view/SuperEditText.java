@@ -38,12 +38,16 @@ public class SuperEditText extends AppCompatEditText {
     private int left_width; // 左侧图标宽（px）
     private int left_height; // 左侧图标高（px）
 
+    private  int delete_x,delete_y; // 左侧图标起点
+    private int delete_width; // 左侧图标宽（px）
+    private int delete_height; // 左侧图标高（px）
+
     private int cursor; // 光标
 
     
 
-    private int colorClick;
-    private int colorUnClick;
+    private int lineColor_click;
+    private int lineColor_unclick;
     private int color;
 
     public SuperEditText(Context context) {
@@ -66,15 +70,21 @@ public class SuperEditText extends AppCompatEditText {
         // 获取控件资源
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SuperEditText);
 
+
+        // 删除图标大小
+        // 起点(x，y)
+        delete_x = typedArray.getInteger(R.styleable.SuperEditText_delete_x, 0);
+        delete_y = typedArray.getInteger(R.styleable.SuperEditText_delete_y, 0);
+        delete_width = typedArray.getInteger(R.styleable.SuperEditText_delete_width, 30);
+        delete_height = typedArray.getInteger(R.styleable.SuperEditText_delete_height, 30);
+
         // 删除图标
         ic_deleteResID = typedArray.getResourceId(R.styleable.SuperEditText_ic_delete,R.drawable.delete);
         // 初始化操作
         // 1. 根据资源ID获取图标资源（转化成Drawable对象）
         // 2. 再设置图标大小(从右侧开始算起，后两个参数 = 宽高(px))
         ic_delete =  getResources().getDrawable(ic_deleteResID);
-
-        ic_delete.setBounds(0, 0, 50, 50);
-
+        ic_delete.setBounds(delete_x, delete_y, delete_width, delete_height);
 
         // 左侧图标大小
         // 起点(x，y)
@@ -82,8 +92,7 @@ public class SuperEditText extends AppCompatEditText {
         left_y = typedArray.getInteger(R.styleable.SuperEditText_left_y, 0);
         left_width = typedArray.getInteger(R.styleable.SuperEditText_left_width, 30);
         left_height = typedArray.getInteger(R.styleable.SuperEditText_left_height, 30);
-
-
+        
         ic_left_clickResID = typedArray.getResourceId(R.styleable.SuperEditText_ic_left_click, R.drawable.ic_left_click);
         // 初始化操作
         // 1. 根据资源ID获取图标资源（转化成Drawable对象）
@@ -102,31 +111,27 @@ public class SuperEditText extends AppCompatEditText {
         cursor = typedArray.getResourceId(R.styleable.SuperEditText_cursor, R.drawable.cursor);
 
 
-        // 方块颜色（使用十六进制代码，如#333、#8e8e8e）
-        int defaultColor1 = context.getResources().getColor(R.color.colorClick); // 默认颜色
-        int defaultColor2 = context.getResources().getColor(R.color.colorUnClick); // 默认颜色
-        colorClick = typedArray.getColor(R.styleable.SuperEditText_Colorclick, defaultColor1);
-        colorUnClick = typedArray.getColor(R.styleable.SuperEditText_Colorunclick, defaultColor2);
-        color = colorUnClick;
-
-
-//       ic_delete.setBounds(0, 0,  ic_delete.getIntrinsicWidth()-50,  ic_delete.getIntrinsicHeight()-50);
-
-
-
-
-
-
+        // 分割线相关
         mPaint = new Paint();
-        // mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setStrokeWidth(1.5f);
-        mPaint.setColor(colorUnClick);
-        setTextColor(color);
+        mPaint.setStrokeWidth(1.5f); // 分割线粗细
 
+        // 分割线颜色（使用十六进制代码，如#333、#8e8e8e）
+        int lineColorClick_default = context.getResources().getColor(R.color.lineColor_click); // 默认 = 蓝色#1296db
+        int lineColorunClick_default = context.getResources().getColor(R.color.lineColor_unclick); // 默认 = 灰色#9b9b9b
+        lineColor_click = typedArray.getColor(R.styleable.SuperEditText_lineColor_click, lineColorClick_default);
+        lineColor_unclick = typedArray.getColor(R.styleable.SuperEditText_lineColor_unclick, lineColorunClick_default);
+        color = lineColor_unclick;
+
+        mPaint.setColor(lineColor_unclick); // 分割线默认颜色 = 灰色
+        setTextColor(color); // 字体默认颜色 = 灰色
+
+        // 设置图片（初始状态仅有左侧图片）
         setCompoundDrawables( ic_left_unclick, null,
                null, null);
 
+        // 消除自带下划线
         setBackground(null);
+
 
 
         try {
@@ -175,7 +180,7 @@ public class SuperEditText extends AppCompatEditText {
     private void setClearIconVisible(boolean visible,boolean qian) {
         setCompoundDrawables(qian ?  ic_left_click :  ic_left_unclick, null,
                 visible ?  ic_delete: null, null);
-        color = qian ? colorClick : colorUnClick;
+        color = qian ? lineColor_click : lineColor_unclick;
         setTextColor(color);
 
 

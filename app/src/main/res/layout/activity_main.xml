@@ -17,10 +17,12 @@
         app:ic_left_unclick="@drawable/ic_left_click"
         app:left_width="60"
         app:left_height="60"
+        app:delete_width="80"
+        app:delete_height="80"
+        app:lineColor_click="@color/colorAccent1"
 
         android:textSize="20sp"
         android:textColor="@color/colorfocus"
-
 
         app:cursor="@drawable/cursortest"
 
