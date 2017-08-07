@@ -68,7 +68,7 @@ public class LineEditText extends AppCompatEditText implements TextWatcher,
         unfocusedDrawableId = a.getResourceId(
                 R.styleable.SuperEditText_accountUnClick, R.drawable.account_unclick);
         errorDrawableId = a.getResourceId(
-                R.styleable.SuperEditText_delete, R.drawable.delete);
+                R.styleable.SuperEditText_ic_delete, R.drawable.delete);
         a.recycle();
         init();
     }

@@ -19,16 +19,21 @@ import java.lang.reflect.Field;
 
 public class SuperEditText extends AppCompatEditText {
 
-    private Paint mPaint;
+    /*
+    * 定义属性变量
+    * */
+    private Paint mPaint; // 画笔
+
 
     private Drawable mClearDrawable_click;
-//    private Drawable logo_click;
-    private int logo_click1;
-    private Drawable logo_click;
-    private Drawable logo_unclick;
-    private int cursor;
+//    private Drawable  ic_left_click;
+    private int  ic_left_click1;    // 左侧图标 资源ID（点击）
+    private Drawable  ic_left_click; // 左侧图标（点击）
+    private Drawable  ic_left_unclick; // 左侧图标（未点击）
+    private int cursor; // 光标
 
-    private Drawable mClearDrawable_unclick;
+    private Drawable  ic_delete; // 删除图标
+    private int  ic_deleteResID; // 删除图标(资源ID)
 
     private int colorClick;
     private int colorUnClick;
@@ -51,18 +56,25 @@ public class SuperEditText extends AppCompatEditText {
 
     private void init(Context context, AttributeSet attrs) {
 
-//        setBackgroundColor(getResources().getColor(R.color.colorAccent1));
-        // 控件资源名称
+        // 获取控件资源
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SuperEditText);
 
-        mClearDrawable_unclick = getResources().getDrawable(R.drawable.delete);
+        // 删除图标
+        ic_deleteResID = typedArray.getResourceId(R.styleable.SuperEditText_ic_delete,R.drawable.delete);
 
-//        logo_click = typedArray.getResources(R.styleable.SuperEditText_accountClick);
-//        logo_click = getResources().getDrawable(R.drawable.account);
-        logo_unclick = getResources().getDrawable(R.drawable.account_unclick);
 
-        logo_click1 = typedArray.getResourceId(R.styleable.SuperEditText_accountClick, R.drawable.account);
+        // 1. 根据资源ID获取图标资源（转化成Drawable对象）
+        // 2. 再设置图标大小
+        ic_delete =  getResources().getDrawable(ic_deleteResID);
+        ic_delete.setBounds(0, 0, 50, 50);
 
+
+
+//         ic_left_click = typedArray.getResources(R.styleable.SuperEditText_accountClick);
+//         ic_left_click = getResources().getDrawable(R.drawable.account);
+         ic_left_unclick = getResources().getDrawable(R.drawable.account_unclick);
+
+         ic_left_click1 = typedArray.getResourceId(R.styleable.SuperEditText_accountClick, R.drawable.account);
 
         cursor = typedArray.getResourceId(R.styleable.SuperEditText_cursor, R.drawable.cursor);
 
@@ -75,14 +87,15 @@ public class SuperEditText extends AppCompatEditText {
         color = colorUnClick;
 
 
-//      mClearDrawable_unclick.setBounds(0, 0, mClearDrawable_unclick.getIntrinsicWidth()-50, mClearDrawable_unclick.getIntrinsicHeight()-50);
-        mClearDrawable_unclick.setBounds(0, 0, 50, 50);
+//       ic_delete.setBounds(0, 0,  ic_delete.getIntrinsicWidth()-50,  ic_delete.getIntrinsicHeight()-50);
 
 
-        logo_click = getResources().getDrawable(logo_click1);
+
+
+         ic_left_click = getResources().getDrawable( ic_left_click1);
         // 从右侧开始算起，后两个参数 = 宽高(px)
-        logo_click.setBounds(0, 0, 50, 50);
-        logo_unclick.setBounds(0, 0, 50, 50);
+         ic_left_click.setBounds(0, 0, 50, 50);
+         ic_left_unclick.setBounds(0, 0, 50, 50);
 
         mPaint = new Paint();
         // mPaint.setStyle(Paint.Style.FILL);
@@ -90,7 +103,7 @@ public class SuperEditText extends AppCompatEditText {
         mPaint.setColor(colorUnClick);
         setTextColor(color);
 
-        setCompoundDrawables(logo_unclick, null,
+        setCompoundDrawables( ic_left_unclick, null,
                null, null);
 
         setBackground(null);
@@ -127,7 +140,7 @@ public class SuperEditText extends AppCompatEditText {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_UP:
-                Drawable drawable = mClearDrawable_unclick;
+                Drawable drawable =  ic_delete;
                 if (drawable != null && event.getX() <= (getWidth() - getPaddingRight())
                         && event.getX() >= (getWidth() - getPaddingRight() - drawable.getBounds().width())) {
 
@@ -140,8 +153,8 @@ public class SuperEditText extends AppCompatEditText {
     }
 
     private void setClearIconVisible(boolean visible,boolean qian) {
-        setCompoundDrawables(qian ? logo_click : logo_unclick, null,
-                visible ? mClearDrawable_unclick : null, null);
+        setCompoundDrawables(qian ?  ic_left_click :  ic_left_unclick, null,
+                visible ?  ic_delete: null, null);
         color = qian ? colorClick : colorUnClick;
         setTextColor(color);
 

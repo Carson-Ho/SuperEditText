@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="SuperEditText">
-        <attr name="half_BlockWidth" format="dimension" />
-        <attr name="blockInterval" format="dimension" />
-        <attr name="initPosition" format="integer" />
-        <attr name="isClock_Wise" format="boolean" />
-        <attr name="lineNumber" format="integer"  />
-        <attr name="moveSpeed" format="integer"  />
+
+
+        <attr name="ic_delete" format="reference" />
 
         <attr name="Colorclick" format="color"  />
         <attr name="Colorunclick" format="color"  />
@@ -15,11 +12,8 @@
         <attr name="accountUnClick" format="reference" />
         <attr name="cursor" format="reference" />
 
-        <attr name="delete" format="reference" />
+
         <attr name="delete2" format="reference" />
 
-        <attr name="moveBlock_Angle" format="float"  />
-        <attr name="fixBlock_Angle" format="float"  />
-        <attr name="move_Interpolator" format="reference"  />
     </declare-styleable>
 </resources>
