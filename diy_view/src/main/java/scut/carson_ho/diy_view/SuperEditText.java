@@ -38,6 +38,7 @@ public class SuperEditText extends AppCompatEditText {
     // 分割线变量
     private int lineColor_click,lineColor_unclick;// 点击时 & 未点击颜色
     private int color;
+    private int linePosition;
 
 
     public SuperEditText(Context context) {
@@ -70,8 +71,8 @@ public class SuperEditText extends AppCompatEditText {
         // 起点(x，y)
         left_x = typedArray.getInteger(R.styleable.SuperEditText_left_x, 0);
         left_y = typedArray.getInteger(R.styleable.SuperEditText_left_y, 0);
-        left_width = typedArray.getInteger(R.styleable.SuperEditText_left_width, 30);
-        left_height = typedArray.getInteger(R.styleable.SuperEditText_left_height, 30);
+        left_width = typedArray.getInteger(R.styleable.SuperEditText_left_width, 60);
+        left_height = typedArray.getInteger(R.styleable.SuperEditText_left_height, 60);
         ic_left_click.setBounds(left_x, left_y,left_width, left_height);
 
         // b. 未点击状态
@@ -97,7 +98,7 @@ public class SuperEditText extends AppCompatEditText {
 
         /*分割线*/
         mPaint = new Paint();
-        mPaint.setStrokeWidth(1.0f); // 分割线粗细
+        mPaint.setStrokeWidth(2.0f); // 分割线粗细
 
         // 分割线颜色（使用十六进制代码，如#333、#8e8e8e）
         int lineColorClick_default = context.getResources().getColor(R.color.lineColor_click); // 默认 = 蓝色#1296db
@@ -105,6 +106,8 @@ public class SuperEditText extends AppCompatEditText {
         lineColor_click = typedArray.getColor(R.styleable.SuperEditText_lineColor_click, lineColorClick_default);
         lineColor_unclick = typedArray.getColor(R.styleable.SuperEditText_lineColor_unclick, lineColorunClick_default);
         color = lineColor_unclick;
+
+        linePosition = typedArray.getInteger(R.styleable.SuperEditText_linePosition, 5);
 
         mPaint.setColor(lineColor_unclick); // 分割线默认颜色 = 灰色
         setTextColor(color); // 字体默认颜色 = 灰色
@@ -212,8 +215,8 @@ public class SuperEditText extends AppCompatEditText {
 //        canvas.drawLine(0, this.getHeight()+5, w+x,
 //                this.getHeight() +5, mPaint);
 
-                canvas.drawLine(0, this.getMeasuredHeight()-200, w+x,
-                        this.getMeasuredHeight()-200, mPaint);
+                canvas.drawLine(0, this.getMeasuredHeight()- linePosition, w+x,
+                        this.getMeasuredHeight() - linePosition, mPaint);
 
     }
 
