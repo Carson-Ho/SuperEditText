@@ -6,33 +6,51 @@
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    android:gravity="center">
+    android:gravity="center_horizontal">
 
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="注册登录"
+        android:textSize="60sp"/>
 
     <scut.carson_ho.diy_view.SuperEditText
         android:layout_width="200dp"
-        android:layout_height="300dp"
-        app:ic_delete="@drawable/ic_left_click"
-        app:ic_left_click="@drawable/delete"
-        app:ic_left_unclick="@drawable/ic_left_click"
+        android:layout_height="wrap_content"
+        app:ic_left_click="@drawable/ic_left_click"
+        app:ic_left_unclick="@drawable/ic_left_unclick"
+        app:left_x="0"
+        app:left_y="0"
         app:left_width="60"
         app:left_height="60"
+
+        app:ic_delete="@drawable/delete"
+        app:delete_x="0"
+        app:delete_y="0"
         app:delete_width="80"
         app:delete_height="80"
+
         app:lineColor_click="@color/colorfocus"
-        app:linePosition="300"
-        android:textSize="20sp"
-        android:textColor="@color/colorfocus"
+        app:lineColor_unclick="@color/colorDeafult"
+        app:linePosition="1"
 
         app:cursor="@drawable/cursortest"
+
+        android:textSize="20sp"
+        android:textColor="@color/colorfocus"
 
          />
 
     <scut.carson_ho.diy_view.SuperEditText
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        app:linePosition="40"
+
+        app:ic_left_click="@drawable/password_click"
+        app:ic_left_unclick="@drawable/password_unclick"
+
         android:textSize="20sp"
+        android:inputType="textPassword"
 
         />
 
