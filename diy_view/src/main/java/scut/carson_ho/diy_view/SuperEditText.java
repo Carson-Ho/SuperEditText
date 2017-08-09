@@ -24,7 +24,6 @@ public class SuperEditText extends AppCompatEditText {
     * */
     private Paint mPaint; // 画笔
 
-
     private int  ic_deleteResID; // 删除图标 资源ID
     private Drawable  ic_delete; // 删除图标
     private int delete_x,delete_y,delete_width,delete_height; // 删除图标起点(x,y)、删除图标宽、高（px）
@@ -57,7 +56,7 @@ public class SuperEditText extends AppCompatEditText {
     }
 
     /**
-     * 初始化属性
+     * 步骤1：初始化属性
      */
 
     private void init(Context context, AttributeSet attrs) {
@@ -65,93 +64,113 @@ public class SuperEditText extends AppCompatEditText {
         // 获取控件资源
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.SuperEditText);
 
-        /*左侧图标（点击 & 未点击）*/
-        // a. 点击状态
-        ic_left_clickResID = typedArray.getResourceId(R.styleable.SuperEditText_ic_left_click, R.drawable.ic_left_click);
-        // 初始化操作
-        // 1. 根据资源ID获取图标资源（转化成Drawable对象）
-        ic_left_click =  getResources().getDrawable(ic_left_clickResID);
-        // 2. 设置图标大小
-        // 起点(x，y)
-        left_x = typedArray.getInteger(R.styleable.SuperEditText_left_x, 0);
-        left_y = typedArray.getInteger(R.styleable.SuperEditText_left_y, 0);
-        left_width = typedArray.getInteger(R.styleable.SuperEditText_left_width, 60);
-        left_height = typedArray.getInteger(R.styleable.SuperEditText_left_height, 60);
-        ic_left_click.setBounds(left_x, left_y,left_width, left_height);
+        /**
+         * 初始化左侧图标（点击 & 未点击）
+         */
 
-        // b. 未点击状态
-        ic_left_unclickResID = typedArray.getResourceId(R.styleable.SuperEditText_ic_left_unclick, R.drawable.ic_left_unclick);
-        // 初始化操作
-        // 1. 根据资源ID获取图标资源（转化成Drawable对象）
-        // 2. 设置图标大小
-        ic_left_unclick =  getResources().getDrawable(ic_left_unclickResID);
-        ic_left_unclick.setBounds(left_x, left_y,left_width, left_height);
+        // a. 点击状态的左侧图标
+         // 1. 获取资源ID
+         ic_left_clickResID = typedArray.getResourceId(R.styleable.SuperEditText_ic_left_click, R.drawable.ic_left_click);
+         // 2. 根据资源ID获取图标资源（转化成Drawable对象）
+         ic_left_click =  getResources().getDrawable(ic_left_clickResID);
+         // 3. 设置图标大小
+         // 起点(x，y)、宽= left_width、高 = left_height
+         left_x = typedArray.getInteger(R.styleable.SuperEditText_left_x, 0);
+         left_y = typedArray.getInteger(R.styleable.SuperEditText_left_y, 0);
+         left_width = typedArray.getInteger(R.styleable.SuperEditText_left_width, 60);
+         left_height = typedArray.getInteger(R.styleable.SuperEditText_left_height, 60);
 
+         ic_left_click.setBounds(left_x, left_y,left_width, left_height);
+         // Drawable.setBounds(x,y,width,height) = 设置Drawable的初始位置、宽和高等信息
+         // x = 组件在容器X轴上的起点、y = 组件在容器Y轴上的起点、width=组件的长度、height = 组件的高度
 
-        /*光标*/
-        // 通过反射动态设置光标颜色
-        cursor = typedArray.getResourceId(R.styleable.SuperEditText_cursor, R.drawable.cursor);
-        try {
-            Field f = TextView.class.getDeclaredField("mCursorDrawableRes");
-            f.setAccessible(true);
-            f.set(this, cursor); // 要传入ID
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        /*分割线*/
-        mPaint = new Paint();
-        mPaint.setStrokeWidth(2.0f); // 分割线粗细
-
-        // 分割线颜色（使用十六进制代码，如#333、#8e8e8e）
-        int lineColorClick_default = context.getResources().getColor(R.color.lineColor_click); // 默认 = 蓝色#1296db
-        int lineColorunClick_default = context.getResources().getColor(R.color.lineColor_unclick); // 默认 = 灰色#9b9b9b
-        lineColor_click = typedArray.getColor(R.styleable.SuperEditText_lineColor_click, lineColorClick_default);
-        lineColor_unclick = typedArray.getColor(R.styleable.SuperEditText_lineColor_unclick, lineColorunClick_default);
-        color = lineColor_unclick;
-
-        linePosition = typedArray.getInteger(R.styleable.SuperEditText_linePosition, 5);
-
-        mPaint.setColor(lineColor_unclick); // 分割线默认颜色 = 灰色
-        setTextColor(color); // 字体默认颜色 = 灰色
-
-        // 消除自带下划线
-        setBackground(null);
+        // b. 未点击状态的左侧图标
+         // 1. 获取资源ID
+         ic_left_unclickResID = typedArray.getResourceId(R.styleable.SuperEditText_ic_left_unclick, R.drawable.ic_left_unclick);
+         // 2. 根据资源ID获取图标资源（转化成Drawable对象）
+         // 3. 设置图标大小（此处默认左侧图标点解 & 未点击状态的大小相同）
+         ic_left_unclick =  getResources().getDrawable(ic_left_unclickResID);
+         ic_left_unclick.setBounds(left_x, left_y,left_width, left_height);
 
 
-        /*删除图标*/
-        ic_deleteResID = typedArray.getResourceId(R.styleable.SuperEditText_ic_delete,R.drawable.delete);
-        // 初始化操作
-        // 1. 根据资源ID获取图标资源（转化成Drawable对象）
-        ic_delete =  getResources().getDrawable(ic_deleteResID);
+        /**
+         * 初始化删除图标
+         */
 
-        // 2. 设置图标大小(从右侧开始算起，后两个参数 = 宽高(px))
-        // 起点(x，y)
-        delete_x = typedArray.getInteger(R.styleable.SuperEditText_delete_x, 0);
-        delete_y = typedArray.getInteger(R.styleable.SuperEditText_delete_y, 0);
-        delete_width = typedArray.getInteger(R.styleable.SuperEditText_delete_width, 30);
-        delete_height = typedArray.getInteger(R.styleable.SuperEditText_delete_height, 30);
-        ic_delete.setBounds(delete_x, delete_y, delete_width, delete_height);
-        
-        // 设置EditText左侧 & 右侧的图片（初始状态仅有左侧图片）
+         // 1. 获取资源ID
+         ic_deleteResID = typedArray.getResourceId(R.styleable.SuperEditText_ic_delete,R.drawable.delete);
+         // 2. 根据资源ID获取图标资源（转化成Drawable对象）
+         ic_delete =  getResources().getDrawable(ic_deleteResID);
+         // 3. 设置图标大小
+         // 起点(x，y)、宽= left_width、高 = left_height
+         delete_x = typedArray.getInteger(R.styleable.SuperEditText_delete_x, 0);
+         delete_y = typedArray.getInteger(R.styleable.SuperEditText_delete_y, 0);
+         delete_width = typedArray.getInteger(R.styleable.SuperEditText_delete_width, 60);
+         delete_height = typedArray.getInteger(R.styleable.SuperEditText_delete_height, 60);
+         ic_delete.setBounds(delete_x, delete_y, delete_width, delete_height);
+
+        /**
+         * 设置EditText左侧 & 右侧的图片（初始状态仅有左侧图片））
+         */
         setCompoundDrawables( ic_left_unclick, null,
                 null, null);
 
         // setCompoundDrawables(Drawable left, Drawable top, Drawable right, Drawable bottom)介绍
         // 作用：在EditText上、下、左、右设置图标（相当于android:drawableLeft=""  android:drawableRight=""）
         // 备注：传入的Drawable对象必须已经setBounds(x,y,width,height)，即必须设置过初始位置、宽和高等信息
-             // x:组件在容器X轴上的起点 y:组件在容器Y轴上的起点 width:组件的长度 height:组件的高度
-             // 若不想在某个地方显示，则设置为null
+        // x:组件在容器X轴上的起点 y:组件在容器Y轴上的起点 width:组件的长度 height:组件的高度
+        // 若不想在某个地方显示，则设置为null
 
         // 另外一个相似的方法：setCompoundDrawablesWithIntrinsicBounds(Drawable left, Drawable top, Drawable right, Drawable bottom)
         // 作用：在EditText上、下、左、右设置图标
         // 与setCompoundDrawables的区别：setCompoundDrawablesWithIntrinsicBounds（）传入的Drawable的宽高=固有宽高（自动通过getIntrinsicWidth（）& getIntrinsicHeight（）获取）
         // 不需要设置setBounds(x,y,width,height)
+
+        /**
+         * 初始化光标（颜色 & 粗细）
+         */
+         // 原理：通过 反射机制 动态设置光标
+         // 1. 获取资源ID
+         cursor = typedArray.getResourceId(R.styleable.SuperEditText_cursor, R.drawable.cursor);
+         try {
+
+            // 2. 通过反射 获取光标属性
+            Field f = TextView.class.getDeclaredField("mCursorDrawableRes");
+            f.setAccessible(true);
+            // 3. 传入资源ID
+            f.set(this, cursor);
+
+         } catch (Exception e) {
+            e.printStackTrace();
+         }
+
+        /**
+         * 初始化分割线（颜色、粗细、位置）
+         */
+         // 1. 设置画笔
+         mPaint = new Paint();
+         mPaint.setStrokeWidth(2.0f); // 分割线粗细
+
+         // 2. 设置分割线颜色（使用十六进制代码，如#333、#8e8e8e）
+         int lineColorClick_default = context.getResources().getColor(R.color.lineColor_click); // 默认 = 蓝色#1296db
+         int lineColorunClick_default = context.getResources().getColor(R.color.lineColor_unclick); // 默认 = 灰色#9b9b9b
+         lineColor_click = typedArray.getColor(R.styleable.SuperEditText_lineColor_click, lineColorClick_default);
+         lineColor_unclick = typedArray.getColor(R.styleable.SuperEditText_lineColor_unclick, lineColorunClick_default);
+         color = lineColor_unclick;
+
+         mPaint.setColor(lineColor_unclick); // 分割线默认颜色 = 灰色
+         setTextColor(color); // 字体默认颜色 = 灰色
+
+         // 3. 分割线位置
+         linePosition = typedArray.getInteger(R.styleable.SuperEditText_linePosition, 1);
+         // 消除自带下划线
+         setBackground(null);
+
+
     }
 
     /**
-     * 复写EditText本身的方法
+     * 复写EditText本身的方法：onTextChanged（）
      * 调用时刻：当输入框内容变化时
      */
     @Override
@@ -159,11 +178,11 @@ public class SuperEditText extends AppCompatEditText {
         super.onTextChanged(text, start, lengthBefore, lengthAfter);
         setDeleteIconVisible(hasFocus() && text.length() > 0,hasFocus());
         // hasFocus()返回是否获得EditTEXT的焦点，即是否选中
-        // setDeleteIconVisible = 根据传入的是否选中 & 是否有输入来判断是否显示删除图标
+        // setDeleteIconVisible（） = 根据传入的是否选中 & 是否有输入来判断是否显示删除图标->>关注1
     }
 
     /**
-     * 复写EditText本身的方法
+     * 复写EditText本身的方法：onFocusChanged（）
      * 调用时刻：焦点发生变化时
      */
     @Override
@@ -171,16 +190,14 @@ public class SuperEditText extends AppCompatEditText {
         super.onFocusChanged(focused, direction, previouslyFocusedRect);
         setDeleteIconVisible(focused && length() > 0,focused);
         // focused = 是否获得焦点
-        // 同样根据setDeleteIconVisible判断是否要显示删除图标
+        // 同样根据setDeleteIconVisible（）判断是否要显示删除图标->>关注1
     }
 
 
     /**
-     * 关注：
      * 作用：对删除图标区域设置为"点击 即 清空搜索框内容"
      * 原理：当手指抬起的位置在删除图标的区域，即视为点击了删除图标 = 清空搜索框内容
      */
-
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
@@ -210,7 +227,7 @@ public class SuperEditText extends AppCompatEditText {
     }
 
     /**
-     * 关注
+     * 关注1
      * 作用：判断是否显示删除图标 & 设置分割线颜色
      */
     private void setDeleteIconVisible(boolean deleteVisible,boolean leftVisible) {
@@ -222,7 +239,6 @@ public class SuperEditText extends AppCompatEditText {
     }
 
     /**
-     * 关注
      * 作用：绘制分割线
      */
     @Override

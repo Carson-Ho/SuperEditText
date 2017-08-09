@@ -2,13 +2,11 @@
 <resources>
     <declare-styleable name="SuperEditText">
 
-
         <attr name="ic_delete" format="reference" />
         <attr name="delete_x" format="integer"  />
         <attr name="delete_y" format="integer"  />
         <attr name="delete_width" format="integer"  />
         <attr name="delete_height" format="integer"  />
-
 
         <attr name="ic_left_click" format="reference" />
         <attr name="ic_left_unclick" format="reference" />
@@ -17,16 +15,11 @@
         <attr name="left_width" format="integer"  />
         <attr name="left_height" format="integer"  />
 
-
-
-
         <attr name="lineColor_click" format="color"  />
         <attr name="lineColor_unclick" format="color"  />
         <attr name="linePosition" format="integer"  />
 
-
         <attr name="cursor" format="reference" />
-
 
     </declare-styleable>
 </resources>
