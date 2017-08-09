@@ -56,6 +56,10 @@ public class SuperEditText extends AppCompatEditText {
         init(context, attrs);
     }
 
+    /**
+     * 初始化属性
+     */
+
     private void init(Context context, AttributeSet attrs) {
 
         // 获取控件资源
@@ -129,17 +133,26 @@ public class SuperEditText extends AppCompatEditText {
         delete_width = typedArray.getInteger(R.styleable.SuperEditText_delete_width, 30);
         delete_height = typedArray.getInteger(R.styleable.SuperEditText_delete_height, 30);
         ic_delete.setBounds(delete_x, delete_y, delete_width, delete_height);
-
-
-        // 设置图片（初始状态仅有左侧图片）
+        
+        // 设置EditText左侧 & 右侧的图片（初始状态仅有左侧图片）
         setCompoundDrawables( ic_left_unclick, null,
                 null, null);
 
+        // setCompoundDrawables(Drawable left, Drawable top, Drawable right, Drawable bottom)介绍
+        // 作用：在EditText上、下、左、右设置图标（相当于android:drawableLeft=""  android:drawableRight=""）
+        // 备注：传入的Drawable对象必须已经setBounds(x,y,width,height)，即必须设置过初始位置、宽和高等信息
+             // x:组件在容器X轴上的起点 y:组件在容器Y轴上的起点 width:组件的长度 height:组件的高度
+             // 若不想在某个地方显示，则设置为null
+
+        // 另外一个相似的方法：setCompoundDrawablesWithIntrinsicBounds(Drawable left, Drawable top, Drawable right, Drawable bottom)
+        // 作用：在EditText上、下、左、右设置图标
+        // 与setCompoundDrawables的区别：setCompoundDrawablesWithIntrinsicBounds（）传入的Drawable的宽高=固有宽高（自动通过getIntrinsicWidth（）& getIntrinsicHeight（）获取）
+        // 不需要设置setBounds(x,y,width,height)
     }
 
     /**
      * 复写EditText本身的方法
-     * 调用时刻：当文本变化时
+     * 调用时刻：当输入框内容变化时
      */
     @Override
     protected void onTextChanged(CharSequence text, int start, int lengthBefore, int lengthAfter) {
@@ -151,7 +164,7 @@ public class SuperEditText extends AppCompatEditText {
 
     /**
      * 复写EditText本身的方法
-     * 调用时刻：当获取 & 失去焦点时
+     * 调用时刻：焦点发生变化时
      */
     @Override
     protected void onFocusChanged(boolean focused, int direction, Rect previouslyFocusedRect) {
@@ -163,19 +176,31 @@ public class SuperEditText extends AppCompatEditText {
 
 
     /**
-     * 写到这里
-     *
+     * 关注：
+     * 作用：对删除图标区域设置为"点击 即 清空搜索框内容"
+     * 原理：当手指抬起的位置在删除图标的区域，即视为点击了删除图标 = 清空搜索框内容
      */
-
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+        // 原理：当手指抬起的位置在删除图标的区域，即视为点击了删除图标 = 清空搜索框内容
         switch (event.getAction()) {
+            // 判断动作 = 手指抬起时
             case MotionEvent.ACTION_UP:
                 Drawable drawable =  ic_delete;
+
                 if (drawable != null && event.getX() <= (getWidth() - getPaddingRight())
                         && event.getX() >= (getWidth() - getPaddingRight() - drawable.getBounds().width())) {
 
+                    // 判断条件说明
+                    // event.getX() ：抬起时的位置坐标
+                    // getWidth()：控件的宽度
+                    // getPaddingRight():删除图标图标右边缘至EditText控件右边缘的距离
+                    // 即：getWidth() - getPaddingRight() = 删除图标的右边缘坐标 = X1
+                        // getWidth() - getPaddingRight() - drawable.getBounds().width() = 删除图标左边缘的坐标 = X2
+                    // 所以X1与X2之间的区域 = 删除图标的区域
+                    // 当手指抬起的位置在删除图标的区域（X2=<event.getX() <=X1），即视为点击了删除图标 = 清空搜索框内容
                     setText("");
 
                 }
@@ -212,14 +237,10 @@ public class SuperEditText extends AppCompatEditText {
         int w=this.getMeasuredWidth(); // 获取控件长度
 
         // 传入参数时，线的长度 = 控件长度 + 延伸后的长度
-//        canvas.drawLine(0, this.getHeight()+5, w+x,
-//                this.getHeight() +5, mPaint);
-
                 canvas.drawLine(0, this.getMeasuredHeight()- linePosition, w+x,
                         this.getMeasuredHeight() - linePosition, mPaint);
 
     }
-
 
 }
 
