@@ -172,7 +172,7 @@ dependencies {
 
 
 ## 8. 贡献代码
-- 具体请看：[贡献代码说明](https://github.com/Carson-Ho/DIY_View/blob/master/CONTRIBUTING.md)
+- 具体请看：[贡献代码说明](https://github.com/Carson-Ho/SuperEditText/blob/master/CONTRIBUTING.md)
 - 关于该开源项目的意见 & 建议可在`Issue`上提出。欢迎 Star ！
 
 
