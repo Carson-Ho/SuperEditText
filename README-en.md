@@ -127,7 +127,7 @@ Super_EditText is available under the MIT license.
 
 
 ## 8. Contribute
-Before you open an issue or create a pull request, please read [Contributing Guide](https://github.com/Carson-Ho/DIY_View/blob/master/CONTRIBUTING.md) first.
+Before you open an issue or create a pull request, please read [Contributing Guide](https://github.com/Carson-Ho/SuperEditText/blob/master/CONTRIBUTING.md) first.
 
 
 
