@@ -1,5 +1,5 @@
 # SuperEditText
->  Click to see [English Document](https://github.com/Carson-Ho/DIY_View/blob/master/README-en.md)
+>  Click to see [English Document](https://github.com/Carson-Ho/SuperEditText/blob/master/README-en.md)
 - 作者：Carson_Ho
 - 概述
 
